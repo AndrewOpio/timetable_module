@@ -15,4 +15,9 @@
                 exit;
             break;
 
+        case "timetable/delete"://delete timetable route
+                include_once "api/timetable/delete_entry.php";//Delete timetable Endpoint
+                exit;
+            break;
+
     endswitch;

@@ -4,11 +4,11 @@ namespace model\Timetable;
 
 use model\App;
 
-class Settings extends App
+class BreakPoints extends App
 {
-    private $TableName = "tbl_settings";
+    private $TableName = "tbl_break_points";
 
-    public function __get_settings()
+    public function __get_break_points()
     {
         $query = "SELECT * FROM $this->TableName";
         $result = mysqli_work($query);
@@ -31,23 +31,33 @@ class Settings extends App
 
 
 
-    public function __add_settings($start_time, $end_time, $period)
+    public function __add_break_point($start_time, $end_time)
     {
-        $query = "INSERT INTO $this->TableName (start_time, end_time, period) VALUES('$start_time', '$end_time', '$period')";
-        $result = mysqli_work_insert($query);
 
-        if ($result) {
-            $this->Success = "Success";
-            return $result;
+        $query = "SELECT * FROM $this->TableName WHERE start_time = '$start_time' OR end_time = '$end_time'";
+        $result = mysqli_work($query);
+
+        if ($result->num_rows > 0) {
+            $this->Error = "This break point already exist.";
+            return false;
+
+        } else {
+            $query = "INSERT INTO $this->TableName (start_time, end_time) VALUES('$start_time', '$end_time')";
+            $result = mysqli_work_insert($query);
+
+            if ($result) {
+                $this->Success = "Success";
+                return $result;
+            }
+
+            $this->Error = "Failed";
+            return false;
         }
-
-        $this->Error = "Failed";
-        return false;
     }
 
 
-
-    public function __edit_settings()
+    
+    public function __edit_break_point()
     {
         $query = "UPDATE $this->TableName SET start_time = $start_time, end_time = $end_time, period = $period";
         $result = mysqli_work_update($query);
@@ -62,7 +72,8 @@ class Settings extends App
     }
 
 
-    public function __delete_settings($id)
+
+    public function __delete_break_point($id)
     {
         $result = mysqli_delete($this->TableName, $id);
         if ($result) {
@@ -73,6 +84,7 @@ class Settings extends App
         $this->Error = "Failed";
         return false;
     }
+
 
 
     public function __init()

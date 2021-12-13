@@ -1,16 +1,15 @@
 <?php
 
-use model\Timetable\Settings;
+use model\Timetable\BreakPoints;
 
 require_api_headers();
 $data=json_decode(file_get_contents("php://input"));
-require_api_data($data, ['start_time', 'end_time', 'period']);
+require_api_data($data, ['start_time', 'end_time']);
 
-$NewRequest = new Settings;
-$result = $NewRequest->__add_settings(
+$NewRequest = new BreakPoints;
+$result = $NewRequest->__add_break_point(
     clean($data->start_time),
-    clean($data->end_time),
-    clean($data->period)
+    clean($data->end_time)
 );
 
 if ($result)

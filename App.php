@@ -10,6 +10,7 @@
 
     include_once "routes/route_timetable.php";
     include_once "routes/route_settings.php";
+    include_once "routes/route_break_points.php";
 
     include_once "api/404.php";
 ?>

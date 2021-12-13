@@ -6,12 +6,17 @@
             break;
 
         case "timetable/settings/edit"://edit timetable settings route
-                include_once "api/timetable/edit_timetable.php";//Edit timetable settings Endpoint
+                include_once "api/timetable/edit_settings.php";//Edit timetable settings Endpoint
                 exit;
             break;
 
         case "timetable/settings/get"://get timetable settings route
-                include_once "api/timetable/get_timetable.php";//Get timetable settings Endpoint
+                include_once "api/timetable/get_settings.php";//Get timetable settings Endpoint
+                exit;
+            break;
+
+        case "timetable/settings/delete"://delete timetable settings route
+                include_once "api/timetable/delete_settings.php";//Delete timetable settings Endpoint
                 exit;
             break;
 

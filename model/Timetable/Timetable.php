@@ -20,8 +20,18 @@ class Timetable extends App
                 $data[$i] = $row;
                 $i++;
             endwhile;
-    
-            $this->Success="Success";
+            
+            $time1 = "10:00:00";
+            $time2 = "11:00:00";
+            $time3 = "10:45:00";
+
+
+            if ($time3 > $time1 && $time3 < $time2) {
+                $this->Success="Success";
+            } else {
+                $this->Success="Try again.";
+            }
+
             return $data;
         }
 
@@ -32,20 +42,30 @@ class Timetable extends App
 
     public function __add_entry($subject, $time, $teacher, $day, $class)
     {
-        $query = "INSERT INTO $this->TableName (subject, time, teacher, day, class) VALUES('$subject', '$time', '$teacher', '$day', '$class')";
-        $result = mysqli_work_insert($query);
 
-        if ($result) {
-            $this->Success = "Success";
-            return $result;
-        }
+        $query = "SELECT * FROM $this->TableName WHERE teacher = '$teacher' AND day = '$day' AND time = '$time'";
+        $result = mysqli_work($query);
 
-        $this->Error = "Failed";
-        return false;
+        if ($result->num_rows > 0) {
+            $this->Error = "This slot is already taken by this teacher.";
+            return false;
+
+        } else {
+            $query = "INSERT INTO $this->TableName (subject, time, teacher, day, class) VALUES('$subject', '$time', '$teacher', '$day', '$class')";
+            $result = mysqli_work_insert($query);
+
+            if ($result) {
+                $this->Success = "Success";
+                return $result;
+            }
+
+            $this->Error = "Failed";
+            return false;
+       }
     }
 
 
-    public function __edit_timetable($subject, $time, $teacher, $day, $class)
+    public function __edit_timetable($id, $subject, $time, $teacher, $day, $class)
     {
         $query = "UPDATE $this->TableName SET subject = $subject, time = $time, teacher = $teacher, day = $day, class = $class WHERE id = $id";
         $result = mysqli_work_update($query);
@@ -60,9 +80,21 @@ class Timetable extends App
     }
 
 
+    public function __delete_entry($id)
+    {
+        $result = mysqli_delete($this->TableName, $id);
+        if ($result) {
+            $this->Success = "Success";
+            return $result;
+        }
+
+        $this->Error = "Failed";
+        return false;
+    }
+
+
     public function __init()
     {
-        $this->Success="Success  is nice";
-        //subject fkey, time, teachers fkey, day, class
+        //subject fkey, start_time, teachers fkey, day, class, status, periods
     }
 }

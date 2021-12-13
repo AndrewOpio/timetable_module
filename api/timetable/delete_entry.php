@@ -1,16 +1,14 @@
 <?php
 
-use model\Timetable\Settings;
+use model\Timetable\Timetable;
 
 require_api_headers();
 $data=json_decode(file_get_contents("php://input"));
-require_api_data($data, ['start_time', 'end_time', 'period']);
+require_api_data($data, ['id']);
 
-$NewRequest = new Settings;
-$result = $NewRequest->__add_settings(
-    clean($data->start_time),
-    clean($data->end_time),
-    clean($data->period)
+$NewRequest = new Timetable;
+$result = $NewRequest->__delete_entry(
+    clean($data->id)
 );
 
 if ($result)
